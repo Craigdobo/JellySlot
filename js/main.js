@@ -99,7 +99,8 @@ function assetLoad() {
         refresh();
     };
     yesquit.mouseup = function (mouseData) {
-        window.location = "closewindow.html";
+        //window.location = "closewindow.html"
+        window.close();
     };
 
     noquit.mousedown = function (mouseData) {
@@ -195,7 +196,7 @@ function assetLoad() {
         refresh();
     };
     spin.click = function (mouseData) {
-        //moveSprite();
+        moveSprite();
         console.log("Click");
     };
 
@@ -313,10 +314,10 @@ function decreaseSpin() {
     refresh();
 }
 
-//function moveSprite() {
+function moveSprite() {
 
-  //  for (var i = 0; i < 15; i ++) {
-    //    images[i].y += 10;
-      //  requestAnimationFrame(moveSprite);
-    //}
-//}
+  for (var i = 0; i < 15; i ++) {
+        images[i].y += 1;
+        requestAnimationFrame(moveSprite);
+    }
+}
