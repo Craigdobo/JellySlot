@@ -314,7 +314,7 @@ function moveSprite() {
     {
         if (images[0].y >= 300) {
             cancelAnimationFrame(moveSprite);
-
+            spin.interactive = true;
             reelcount = 0;
         }
         else {
@@ -325,12 +325,13 @@ function moveSprite() {
             images[4].y += 10;
             requestAnimationFrame(moveSprite);
         }
-      
+
     }
 
     else if (images[0].y >= 600) {
         stage.removeChild(images[0],images[1],images[2],images[3],images[4]);
         addReelSets();
+        spin.interactive = false;
         images[0].position.set(300,150);
         images[1].position.set(450,150);
         images[2].position.set(600,150);
