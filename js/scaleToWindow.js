@@ -1,10 +1,11 @@
 /**
  * Created by cturner on 01/03/2017.
  */
+var scaleX, scaleY, scale, center;
+
 function scaleToWindow(canvas, backgroundColor) {
 
     backgroundColor = backgroundColor || "#ffffff";
-    var scaleX, scaleY, scale, center;
 
     //1. Scale the canvas to the correct size
     //Figure out the scale amount on each axis

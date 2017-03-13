@@ -11,6 +11,8 @@ var downbtn;
 var balance = 200;
 var images = [];
 var rng;
+var reels;
+var reelcount = 0;
 
 function init() {
 
@@ -26,6 +28,7 @@ function init() {
         scaleToWindow(renderer.view);
     });
 
+
     PIXI.loader
         .add(["img/background.png", "img/buttons/spin.png", "img/buttons/home.png", "img/buttons/soundon.png",
             "img/buttons/soundoff.png", "img/buttons/paytable.png", "img/buttons/stakefield.png", "img/buttons/up.png",
@@ -33,6 +36,8 @@ function init() {
             "img/sym/black_jelly.png", "img/sym/green_jelly.png", "img/sym/purple_jelly.png", "img/sym/red_jelly.png", "img/sym/yellow_jelly.png"])
         .on("complete", assetLoad)
         .load();
+
+    refresh();
 }
 
 function assetLoad() {
@@ -99,7 +104,6 @@ function assetLoad() {
         refresh();
     };
     yesquit.mouseup = function (mouseData) {
-        //window.location = "closewindow.html"
         window.close();
     };
 
@@ -255,7 +259,7 @@ function assetLoad() {
         //noinspection JSDuplicatedDeclaration
 
 
-        for (var i = 0; i < 15; i++) {
+        for (var i = 0; i < 5; i++) {
 
             var H6 = new PIXI.Sprite(PIXI.loader.resources["img/sym/blue_jelly.png"].texture);
             H6.scale.set(0.4,0.4);
@@ -269,27 +273,17 @@ function assetLoad() {
             H2.scale.set(0.4,0.4);
             var H1 = new PIXI.Sprite(PIXI.loader.resources["img/sym/black_jelly.png"].texture);
             H1.scale.set(0.4,0.4);
-            var reels = [H1,H2,H3,H4,H5,H6];
+            reels = [H1,H2,H3,H4,H5,H6];
 
-            var rng = Math.floor((Math.random()*5));
+            rng = Math.floor((Math.random()*5));
 
             images[i] = reels[rng];
         }
-        images[0].position.set(300,150);
-        images[1].position.set(450,150);
-        images[2].position.set(600,150);
-        images[3].position.set(750,150);
-        images[4].position.set(900,150);
-        images[5].position.set(300,300);
-        images[6].position.set(450,300);
-        images[7].position.set(600,300);
-        images[8].position.set(750,300);
-        images[9].position.set(900,300);
-        images[10].position.set(300,450);
-        images[11].position.set(450,450);
-        images[12].position.set(600,450);
-        images[13].position.set(750,450);
-        images[14].position.set(900,450);
+        images[0].position.set(300,300);
+        images[1].position.set(450,300);
+        images[2].position.set(600,300);
+        images[3].position.set(750,300);
+        images[4].position.set(900,300);
 
         //noinspection JSDuplicatedDeclaration
         for (var i = 0; i < images.length; i++) {
@@ -316,8 +310,46 @@ function decreaseSpin() {
 
 function moveSprite() {
 
-  for (var i = 0; i < 15; i ++) {
-        images[i].y += 1;
+    if(reelcount === 5)
+    {
+        if (images[0].y >= 300) {
+            cancelAnimationFrame(moveSprite);
+
+            reelcount = 0;
+        }
+        else {
+            images[0].y += 10;
+            images[1].y += 10;
+            images[2].y += 10;
+            images[3].y += 10;
+            images[4].y += 10;
+            requestAnimationFrame(moveSprite);
+        }
+      
+    }
+
+    else if (images[0].y >= 600) {
+        stage.removeChild(images[0],images[1],images[2],images[3],images[4]);
+        addReelSets();
+        images[0].position.set(300,150);
+        images[1].position.set(450,150);
+        images[2].position.set(600,150);
+        images[3].position.set(750,150);
+        images[4].position.set(900,150);
+        images[0].y += 10;
+        images[1].y += 10;
+        images[2].y += 10;
+        images[3].y += 10;
+        images[4].y += 10;
+        reelcount = reelcount + 1;
+        requestAnimationFrame(moveSprite);
+    }
+    else{
+        images[0].y += 10;
+        images[1].y += 10;
+        images[2].y += 10;
+        images[3].y += 10;
+        images[4].y += 10;
         requestAnimationFrame(moveSprite);
     }
 }
