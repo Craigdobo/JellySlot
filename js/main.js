@@ -201,7 +201,7 @@ function assetLoad() {
     };
     spin.click = function (mouseData) {
         moveSprite();
-        console.log("Click");
+        spin.interactive = false;
     };
 
     //Stake functionality
@@ -310,7 +310,7 @@ function decreaseSpin() {
 
 function moveSprite() {
 
-    if(reelcount === 5)
+    if(reelcount === 3)
     {
         if (images[0].y >= 300) {
             cancelAnimationFrame(moveSprite);
@@ -331,7 +331,6 @@ function moveSprite() {
     else if (images[0].y >= 600) {
         stage.removeChild(images[0],images[1],images[2],images[3],images[4]);
         addReelSets();
-        spin.interactive = false;
         images[0].position.set(300,150);
         images[1].position.set(450,150);
         images[2].position.set(600,150);
