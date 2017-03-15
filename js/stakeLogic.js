@@ -1,12 +1,12 @@
 /**
  * Created by cturner on 06/03/2017.
  */
-var availStakes = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+var availStakes = [0.20, 0.50, 1, 2, 4, 5, 8, 10, 25, 50, 100, 200];
 var stakepos = 1;
 
 function increaseStake(){
 
-    if (stakepos > 7){
+    if (stakepos > availStakes.length){
         upbtn.interactive = false;
     }
     else{
@@ -34,6 +34,8 @@ function decreaseStake(){
 function checkbalance() {
     if(availStakes[stakepos] > balance){
         spin.interactive = false;
+        stage.addChild(insufffunds,ok);
+        refresh();
     }
     else{
         spin.interactive = true;

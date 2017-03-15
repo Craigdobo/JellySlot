@@ -14,6 +14,8 @@ var rng;
 var reels;
 var reelcount = 0;
 var balancetxt;
+var insufffunds;
+var ok;
 
 function init() {
 
@@ -35,7 +37,7 @@ function init() {
             "img/buttons/soundoff.png", "img/buttons/paytable.png", "img/buttons/stakefield.png", "img/buttons/up.png",
             "img/buttons/down.png", "img/buttons/no.png", "img/buttons/yes.png", "img/quitgame.png", "img/sym/blue_jelly.png",
             "img/sym/black_jelly.png", "img/sym/green_jelly.png", "img/sym/purple_jelly.png", "img/sym/red_jelly.png", "img/sym/yellow_jelly.png",
-            "img/help.png", "img/dialog.png"])
+            "img/help.png", "img/dialog.png", "img/buttons/ok.png"])
         .on("complete", assetLoad)
         .load();
 
@@ -52,9 +54,10 @@ function assetLoad() {
         fontFamily: "Arial",
         fill: 0xFFFFFF,
         fontSize: 50,
-        align: 'left'
+        align: center
     });
-    balancetxt.anchor.set(-4.5, -0.3);
+    balancetxt.position.set(510,20);
+    balancetxt.anchor.set(0,0);
     background.addChild(balancetxt);
 
     //Home Button - clicking closes the lobby
@@ -224,6 +227,31 @@ function assetLoad() {
         refresh();
     }
 
+    insufffunds = new PIXI.Sprite(PIXI.loader.resources["img/dialog.png"].texture);
+    insufffunds.scale.set(0.75,0.75);
+    insufffunds.position.set(380,160);
+
+    var insufficent = new PIXI.Text("NOT ENOUGH FUNDS",{fontFamily: "Arial", fill: 0xCC0000, fontSize: 50, align: 'left'});
+    insufficent.anchor.set(-0.25,-4);
+    insufffunds.addChild(insufficent);
+
+    ok = new PIXI.Sprite(PIXI.loader.resources["img/buttons/ok.png"].texture);
+    ok.scale.set(0.5,0.5);
+    ok.position.set(640,420);
+    ok.buttonMode = true;
+    ok.interactive = true;
+
+    ok.mousedown = function (mouseData){
+        ok.scale.set(0.48,0.48);
+        ok.position.set(641,421);
+    }
+    ok.mouseup = function (mouseData) {
+        ok.scale.set(0.5,0.5);
+        ok.position.set(640,420);
+        stage.removeChild(insufffunds,ok);
+        refresh();
+    }
+
     //Spin button - Needs code to play the game
 
     spin = new PIXI.Sprite(PIXI.loader.resources["img/buttons/spin.png"].texture);
@@ -241,7 +269,6 @@ function assetLoad() {
         refresh();
     };
     spin.click = function (mouseData) {
-        checkbalance();
         moveSprite();
         balance = balance - availStakes[stakepos];
         balancetxt.text = "£ " + balance.toString();
@@ -253,8 +280,10 @@ function assetLoad() {
     var stakefield = new PIXI.Sprite(PIXI.loader.resources["img/buttons/stakefield.png"].texture);
     stakefield.scale.set(0.5, 0.5);
     stakefield.position.set(50, 340);
-    initStake = new PIXI.Text(stake.toString(), {fontFamily: "Arial", fill: 0xFFFFFF, fontSize: 125, align: 'left'});
-    initStake.anchor.set(-1.2, -0.4);
+    initStake = new PIXI.Text(stake.toString(), {fontFamily: "Arial", fill: 0xFFFFFF, fontSize: 100, align: 'left'});
+    initStake.position.set(122,125);
+    initStake.anchor.set(0.5, 0.5);
+    stakefield.addChild(initStake);
     stakefield.addChild(initStake);
 
     upbtn = new PIXI.Sprite(PIXI.loader.resources["img/buttons/up.png"].texture);
@@ -362,6 +391,7 @@ function moveSprite() {
             cancelAnimationFrame(moveSprite);
             spin.interactive = true;
             reelcount = 0;
+            checkbalance();
         }
         else {
             images[0].y += 10;
@@ -399,3 +429,5 @@ function moveSprite() {
         requestAnimationFrame(moveSprite);
     }
 }
+
+
