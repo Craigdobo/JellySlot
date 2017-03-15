@@ -34,7 +34,8 @@ function init() {
         .add(["img/background.png", "img/buttons/spin.png", "img/buttons/home.png", "img/buttons/soundon.png",
             "img/buttons/soundoff.png", "img/buttons/paytable.png", "img/buttons/stakefield.png", "img/buttons/up.png",
             "img/buttons/down.png", "img/buttons/no.png", "img/buttons/yes.png", "img/quitgame.png", "img/sym/blue_jelly.png",
-            "img/sym/black_jelly.png", "img/sym/green_jelly.png", "img/sym/purple_jelly.png", "img/sym/red_jelly.png", "img/sym/yellow_jelly.png"])
+            "img/sym/black_jelly.png", "img/sym/green_jelly.png", "img/sym/purple_jelly.png", "img/sym/red_jelly.png", "img/sym/yellow_jelly.png",
+            "img/help.png", "img/dialog.png"])
         .on("complete", assetLoad)
         .load();
 
@@ -173,16 +174,55 @@ function assetLoad() {
     paytableBtn.position.set(1110, 5);
     paytableBtn.interactive = true;
     paytableBtn.buttonMode = true;
+
+    var help = new PIXI.Sprite(PIXI.loader.resources["img/help.png"].texture);
+    help.scale.set(0.6,0.6);
+    help.position.set(330,0);
+
+    var payquit = new PIXI.Sprite(PIXI.loader.resources["img/buttons/no.png"].texture);
+    payquit.scale.set(0.6, 0.6);
+    payquit.position.set(900, 50);
+    payquit.interactive = true;
+    payquit.buttonMode = true;
+
     paytableBtn.mousedown = function (mouseData) {
         paytableBtn.scale.set(0.48, 0.48);
         paytableBtn.position.set(1111, 5);
         refresh();
     };
+
     paytableBtn.mouseup = function (mouseData) {
         paytableBtn.scale.set(0.5, 0.5);
         paytableBtn.position.set(1110, 5);
+        stage.addChild(help, payquit);
+        spin.interactive = false;
+        soundOn.interactive = false;
+        soundOff.interactive = false;
+        home.interactive = false;
+        paytableBtn.interactive = false;
+        upbtn.interactive = false;
+        downbtn.interactive = false;
         refresh();
     };
+
+    payquit.mousedown = function (mouseData) {
+        payquit.scale.set(0.58, 0.58);
+        payquit.position.set(901, 51);
+        refresh();
+    }
+    payquit.mouseup = function (mouseData) {
+        paytableBtn.scale.set(0.5, 0.5);
+        paytableBtn.position.set(1110, 5);
+        stage.removeChild(help, payquit);
+        spin.interactive = true;
+        soundOn.interactive = true;
+        soundOff.interactive = true;
+        home.interactive = true;
+        paytableBtn.interactive = true;
+        upbtn.interactive = true;
+        downbtn.interactive = true;
+        refresh();
+    }
 
     //Spin button - Needs code to play the game
 
@@ -201,6 +241,7 @@ function assetLoad() {
         refresh();
     };
     spin.click = function (mouseData) {
+        checkbalance();
         moveSprite();
         balance = balance - availStakes[stakepos];
         balancetxt.text = "£ " + balance.toString();
@@ -230,6 +271,7 @@ function assetLoad() {
         upbtn.scale.set(0.50, 0.50);
         upbtn.position.set(65, 250);
         increaseStake();
+        checkbalance();
         refresh();
     };
 
@@ -247,6 +289,7 @@ function assetLoad() {
         downbtn.scale.set(0.5, 0.5);
         downbtn.position.set(65, 470);
         decreaseStake();
+        checkbalance();
         refresh();
     };
     //Add all of the above to the game
@@ -297,7 +340,6 @@ function assetLoad() {
 
 function refresh() {
     renderer.render(stage);
-    checkbalance();
 }
 
 function animateSpin() {
