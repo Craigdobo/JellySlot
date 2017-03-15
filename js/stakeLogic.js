@@ -2,7 +2,7 @@
  * Created by cturner on 06/03/2017.
  */
 var availStakes = [0.20, 0.50, 1, 2, 4, 5, 8, 10, 25, 50, 100, 200];
-var stakepos = 1;
+var stakepos = 3;
 
 function increaseStake(){
 
@@ -12,7 +12,7 @@ function increaseStake(){
     else{
         stakepos = stakepos + 1;
         stake = availStakes[stakepos];
-        initStake.text = availStakes[stakepos].toString();
+        initStake.text = "£" + availStakes[stakepos].toString();
         upbtn.interactive = true;
         downbtn.interactive = true;
     }
@@ -25,7 +25,7 @@ function decreaseStake(){
     else{
         stakepos = stakepos - 1;
         stake = availStakes[stakepos];
-        initStake.text = availStakes[stakepos].toString();
+        initStake.text = "£" + availStakes[stakepos].toString();
         downbtn.interactive = true;
         upbtn.interactive = true;
     }

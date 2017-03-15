@@ -4,11 +4,10 @@
 var stage;
 var renderer;
 var spin;
-var stake = 2;
 var initStake;
 var upbtn;
 var downbtn;
-var balance = 100;
+var balance = 100.00;
 var images = [];
 var rng;
 var reels;
@@ -50,7 +49,7 @@ function assetLoad() {
     background.scale.set(1.05, 1.05);
     background.position.set(0, 0);
 
-    balancetxt = new PIXI.Text("£ " + balance.toString(), {
+    balancetxt = new PIXI.Text("£ " + balance.toFixed(2), {
         fontFamily: "Arial",
         fill: 0xFFFFFF,
         fontSize: 50,
@@ -271,7 +270,7 @@ function assetLoad() {
     spin.click = function (mouseData) {
         moveSprite();
         balance = balance - availStakes[stakepos];
-        balancetxt.text = "£ " + balance.toString();
+        balancetxt.text = "£ " + balance.toFixed(2);
         refresh();
     };
 
@@ -280,7 +279,7 @@ function assetLoad() {
     var stakefield = new PIXI.Sprite(PIXI.loader.resources["img/buttons/stakefield.png"].texture);
     stakefield.scale.set(0.5, 0.5);
     stakefield.position.set(50, 340);
-    initStake = new PIXI.Text(stake.toString(), {fontFamily: "Arial", fill: 0xFFFFFF, fontSize: 100, align: 'left'});
+    initStake = new PIXI.Text("£" + availStakes[stakepos].toString(), {fontFamily: "Arial", fill: 0xFFFFFF, fontSize: 80, align: 'left'});
     initStake.position.set(122,125);
     initStake.anchor.set(0.5, 0.5);
     stakefield.addChild(initStake);
