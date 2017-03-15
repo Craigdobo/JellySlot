@@ -5,11 +5,13 @@ var availStakes = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 var stakepos = 1;
 
 function increaseStake(){
+
     if (stakepos > 7){
         upbtn.interactive = false;
     }
     else{
         stakepos = stakepos + 1;
+        stake = availStakes[stakepos];
         initStake.text = availStakes[stakepos].toString();
         upbtn.interactive = true;
         downbtn.interactive = true;
@@ -22,8 +24,19 @@ function decreaseStake(){
     }
     else{
         stakepos = stakepos - 1;
+        stake = availStakes[stakepos];
         initStake.text = availStakes[stakepos].toString();
         downbtn.interactive = true;
         upbtn.interactive = true;
     }
+}
+
+function checkbalance() {
+    if(availStakes[stakepos] > balance){
+        spin.interactive = false;
+    }
+    else{
+        spin.interactive = true;
+    }
+
 }

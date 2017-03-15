@@ -8,11 +8,12 @@ var stake = 2;
 var initStake;
 var upbtn;
 var downbtn;
-var balance = 200;
+var balance = 100;
 var images = [];
 var rng;
 var reels;
 var reelcount = 0;
+var balancetxt;
 
 function init() {
 
@@ -46,7 +47,7 @@ function assetLoad() {
     background.scale.set(1.05, 1.05);
     background.position.set(0, 0);
 
-    var balancetxt = new PIXI.Text("£ " + balance.toString(), {
+    balancetxt = new PIXI.Text("£ " + balance.toString(), {
         fontFamily: "Arial",
         fill: 0xFFFFFF,
         fontSize: 50,
@@ -201,7 +202,9 @@ function assetLoad() {
     };
     spin.click = function (mouseData) {
         moveSprite();
-        spin.interactive = false;
+        balance = balance - availStakes[stakepos];
+        balancetxt.text = "£ " + balance.toString();
+        refresh();
     };
 
     //Stake functionality
@@ -294,6 +297,7 @@ function assetLoad() {
 
 function refresh() {
     renderer.render(stage);
+    checkbalance();
 }
 
 function animateSpin() {
