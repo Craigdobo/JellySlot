@@ -23,8 +23,8 @@ function init() {
     renderer.backgroundColor = 0xffffff;
     stage = new PIXI.Container();
 
-    renderer.autoResize = true;
-    renderer.resize(window.innerWidth, window.innerHeight);
+    //renderer.autoResize = true;
+    //renderer.resize(window.innerWidth, window.innerHeight);
 
     window.addEventListener("resize", function (event) {
         scaleToWindow(renderer.view);
@@ -46,7 +46,7 @@ function init() {
 function assetLoad() {
 
     var background = new PIXI.Sprite(PIXI.loader.resources["img/background.png"].texture);
-    background.scale.set(1.05, 1.05);
+    background.scale.set(window.innerWidth / 1280, window.innerHeight / 720);
     background.position.set(0, 0);
 
     balancetxt = new PIXI.Text("£ " + balance.toFixed(2), {
