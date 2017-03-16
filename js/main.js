@@ -16,6 +16,7 @@ var balancetxt;
 var insufffunds;
 var ok;
 var keyObject;
+var sound;
 
 function init() {
 
@@ -31,7 +32,6 @@ function init() {
         scaleToWindow(renderer.view);
     });
 
-
     PIXI.loader
         .add(["img/background.png", "img/buttons/spin.png", "img/buttons/home.png", "img/buttons/soundon.png",
             "img/buttons/soundoff.png", "img/buttons/paytable.png", "img/buttons/stakefield.png", "img/buttons/up.png",
@@ -40,6 +40,12 @@ function init() {
             "img/help.png", "img/dialog.png", "img/buttons/ok.png"])
         .on("complete", assetLoad)
         .load();
+
+    sound = new Howl({
+        src: ["snds/music.ogg"]
+    });
+
+    sound.play();
 
     refresh();
 }
@@ -153,6 +159,7 @@ function assetLoad() {
         soundOn.position.set(1180, 5);
         stage.removeChild(soundOn);
         stage.addChild(soundOff);
+        sound.pause();
         refresh();
     };
 
@@ -171,6 +178,7 @@ function assetLoad() {
         soundOff.position.set(1180, 5);
         stage.removeChild(soundOff);
         stage.addChild(soundOn);
+        sound.play();
         refresh();
     };
 
