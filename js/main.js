@@ -15,16 +15,17 @@ var reelcount = 0;
 var balancetxt;
 var insufffunds;
 var ok;
+var keyObject;
 
 function init() {
 
-    renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
+    renderer = PIXI.autoDetectRenderer(1680, 1050);
     document.body.appendChild(renderer.view);
     renderer.backgroundColor = 0xffffff;
     stage = new PIXI.Container();
 
-    //renderer.autoResize = true;
-    //renderer.resize(window.innerWidth, window.innerHeight);
+    renderer.autoResize = true;
+    renderer.resize(window.innerWidth, window.innerHeight);
 
     window.addEventListener("resize", function (event) {
         scaleToWindow(renderer.view);
@@ -93,6 +94,7 @@ function assetLoad() {
         home.position.set(1250, 5);
         stage.addChild(quitdialog, yesquit, noquit);
         spin.interactive = false;
+        keyObject.press = null;
         soundOn.interactive = false;
         soundOff.interactive = false;
         home.interactive = false;
@@ -121,6 +123,9 @@ function assetLoad() {
         noquit.position.set(550, 420);
         stage.removeChild(quitdialog, yesquit, noquit);
         spin.interactive = true;
+        keyObject.press = function() {
+            spingame()
+        };
         soundOn.interactive = true;
         soundOff.interactive = true;
         home.interactive = true;
@@ -198,6 +203,7 @@ function assetLoad() {
         paytableBtn.position.set(1110, 5);
         stage.addChild(help, payquit);
         spin.interactive = false;
+        keyObject.press = null;
         soundOn.interactive = false;
         soundOff.interactive = false;
         home.interactive = false;
@@ -217,6 +223,9 @@ function assetLoad() {
         paytableBtn.position.set(1110, 5);
         stage.removeChild(help, payquit);
         spin.interactive = true;
+        keyObject.press = function() {
+            spingame()
+        };
         soundOn.interactive = true;
         soundOff.interactive = true;
         home.interactive = true;
@@ -259,19 +268,13 @@ function assetLoad() {
     spin.position.set(1200, 400);
     spin.interactive = true;
     spin.buttonMode = true;
-    spin.mouseover = function (mouseData) {
-        animateSpin();
-        refresh();
-    };
-    spin.mouseout = function (mouseData) {
-        decreaseSpin();
-        refresh();
-    };
     spin.click = function (mouseData) {
-        moveSprite();
-        balance = balance - availStakes[stakepos];
-        balancetxt.text = "£ " + balance.toFixed(2);
-        refresh();
+        spingame()
+    };
+
+    keyObject = keyboard(32);
+    keyObject.press = function() {
+        spingame()
     };
 
     //Stake functionality
@@ -317,7 +320,7 @@ function assetLoad() {
         downbtn.scale.set(0.5, 0.5);
         downbtn.position.set(65, 470);
         decreaseStake();
-        checkbalance();
+        checkbalanceDown();
         refresh();
     };
     //Add all of the above to the game
@@ -366,6 +369,14 @@ function assetLoad() {
         }
     }
 
+function spingame(){
+    moveSprite();
+    animateSpin();
+    balance = balance - availStakes[stakepos];
+    balancetxt.text = "£ " + balance.toFixed(2);
+    refresh();
+}
+
 function refresh() {
     renderer.render(stage);
 }
@@ -388,7 +399,11 @@ function moveSprite() {
     {
         if (images[0].y >= 300) {
             cancelAnimationFrame(moveSprite);
+            decreaseSpin();
             spin.interactive = true;
+            keyObject.press = function() {
+                spingame()
+            };
             reelcount = 0;
             checkbalance();
         }

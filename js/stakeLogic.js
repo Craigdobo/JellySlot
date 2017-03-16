@@ -34,11 +34,30 @@ function decreaseStake(){
 function checkbalance() {
     if(availStakes[stakepos] > balance){
         spin.interactive = false;
+        keyObject.press = null;
         stage.addChild(insufffunds,ok);
         refresh();
     }
     else{
         spin.interactive = true;
+        keyObject.press = function() {
+            spingame()
+        };
+    }
+
+}
+
+function checkbalanceDown() {
+    if(availStakes[stakepos] > balance){
+        keyObject.press = null;
+        spin.interactive = false;
+        refresh();
+    }
+    else{
+        spin.interactive = true;
+        keyObject.press = function() {
+            spingame()
+        };
     }
 
 }
