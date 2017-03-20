@@ -9,7 +9,6 @@ var upbtn;
 var downbtn;
 var balance = 100.00;
 var images = [];
-var rng;
 var reels;
 var reelcount = 0;
 var balancetxt;
@@ -17,6 +16,14 @@ var insufffunds;
 var ok;
 var keyObject;
 var sound;
+var H1;
+var H2;
+var H3;
+var H4;
+var H5;
+var H6;
+var winningsfield;
+var wintxt;
 
 function init() {
 
@@ -37,7 +44,7 @@ function init() {
             "img/buttons/soundoff.png", "img/buttons/paytable.png", "img/buttons/stakefield.png", "img/buttons/up.png",
             "img/buttons/down.png", "img/buttons/no.png", "img/buttons/yes.png", "img/quitgame.png", "img/sym/blue_jelly.png",
             "img/sym/black_jelly.png", "img/sym/green_jelly.png", "img/sym/purple_jelly.png", "img/sym/red_jelly.png", "img/sym/yellow_jelly.png",
-            "img/help.png", "img/dialog.png", "img/buttons/ok.png"])
+            "img/help.png", "img/dialog.png", "img/buttons/ok.png", "img/winningsfield.png"])
         .on("complete", assetLoad)
         .load();
 
@@ -277,7 +284,8 @@ function assetLoad() {
     spin.interactive = true;
     spin.buttonMode = true;
     spin.click = function (mouseData) {
-        spingame()
+        stage.removeChild(winningsfield);
+        spingame();
     };
 
     keyObject = keyboard(32);
@@ -331,6 +339,20 @@ function assetLoad() {
         checkbalanceDown();
         refresh();
     };
+
+    winningsfield = new PIXI.Sprite(PIXI.loader.resources["img/winningsfield.png"].texture);
+    winningsfield.scale.set(1,1);
+    winningsfield.position.set(450,650);
+    wintxt = new PIXI.Text(winnings, {
+        fontFamily: "Arial",
+        fill: 0x000000,
+        fontSize: 30,
+        align: center
+    });
+    wintxt.position.set(120,12);
+    wintxt.anchor.set(0,0);
+    winningsfield.addChild(wintxt);
+
     //Add all of the above to the game
 
     stage.addChild(background, spin, home, soundOn, paytableBtn, stakefield, upbtn, downbtn);
@@ -340,42 +362,7 @@ function assetLoad() {
 
 //Code to add starting reels to the game
 
-    function addReelSets() {
-        //noinspection JSDuplicatedDeclaration
 
-
-        for (var i = 0; i < 5; i++) {
-
-            var H6 = new PIXI.Sprite(PIXI.loader.resources["img/sym/blue_jelly.png"].texture);
-            H6.scale.set(0.4,0.4);
-            var H5 = new PIXI.Sprite(PIXI.loader.resources["img/sym/green_jelly.png"].texture);
-            H5.scale.set(0.4,0.4);
-            var H4 = new PIXI.Sprite(PIXI.loader.resources["img/sym/purple_jelly.png"].texture);
-            H4.scale.set(0.4,0.4);
-            var H3 = new PIXI.Sprite(PIXI.loader.resources["img/sym/red_jelly.png"].texture);
-            H3.scale.set(0.4,0.4);
-            var H2 = new PIXI.Sprite(PIXI.loader.resources["img/sym/yellow_jelly.png"].texture);
-            H2.scale.set(0.4,0.4);
-            var H1 = new PIXI.Sprite(PIXI.loader.resources["img/sym/black_jelly.png"].texture);
-            H1.scale.set(0.4,0.4);
-            reels = [H1,H2,H3,H4,H5,H6];
-
-            rng = Math.floor((Math.random()*5));
-
-            images[i] = reels[rng];
-        }
-        images[0].position.set(300,300);
-        images[1].position.set(450,300);
-        images[2].position.set(600,300);
-        images[3].position.set(750,300);
-        images[4].position.set(900,300);
-
-        //noinspection JSDuplicatedDeclaration
-        for (var i = 0; i < images.length; i++) {
-            stage.addChild(images[i]);
-            refresh();
-        }
-    }
 
 function spingame(){
     moveSprite();
@@ -408,12 +395,15 @@ function moveSprite() {
         if (images[0].y >= 300) {
             cancelAnimationFrame(moveSprite);
             decreaseSpin();
+            checkwinnings();
             spin.interactive = true;
             keyObject.press = function() {
                 spingame()
             };
             reelcount = 0;
             checkbalance();
+            stage.addChild(winningsfield);
+            refresh();
         }
         else {
             images[0].y += 10;
